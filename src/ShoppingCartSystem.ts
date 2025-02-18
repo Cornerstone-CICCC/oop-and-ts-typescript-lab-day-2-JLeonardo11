@@ -25,28 +25,46 @@ interface CartItem {
 }
 
 class ShoppingCart<T extends CartItem> {
-  cart = []
+  cart: T[] = [];
 
-  addToCart(product) {
-
+  addToCart(product: T) {
+    const existingProduct = this.cart.find(item => item.id === product.id);
+    if (existingProduct) {
+      existingProduct.quantity += product.quantity;
+      return `${product.name} quantity updated to ${existingProduct.quantity}.`;
+    } else {
+      this.cart.push(product);
+      return `${product.name} added to cart.`;
+    }
   }
 
-  updateQuantity(id, qty) {
+  removeFromCart(id: number) {
+    const index = this.cart.findIndex(item => item.id === id);
+    if (index !== -1) {
+      const removedProduct = this.cart.splice(index, 1)[0];
+      return `${removedProduct.name} removed from cart.`;
+    }
+    return `Product with id ${id} not found in cart.`;
+  }
 
+  updateQuantity(id: number, qty: number) {
+    const product = this.cart.find(item => item.id === id);
+    if (product) {
+      product.quantity = qty;
+      return `Updated quantity of ${product.name} to ${qty}.`;
+    }
+    return `Product with id ${id} not found in cart.`;
+  }
+
+  getProductsOfCategory(category: string) {
+    return this.cart.filter(item => item.category === category);
   }
 
   getTotalPrice() {
-
-  }
-
-  getProductsOfCategory(category) {
-
-  }
-
-  removeFromCart(id) {
-
+    return this.cart.reduce((total, item) => total + item.price * item.quantity, 0);
   }
 }
+
 
 // Test cases
 const cart = new ShoppingCart();

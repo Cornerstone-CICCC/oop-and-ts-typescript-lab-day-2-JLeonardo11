@@ -20,26 +20,57 @@ interface Student {
 }
 
 class Gradebook<T extends Student> {
-  students = []
+  students:T[] = [];
 
-  addStudent(student) {
-
-  }
-
-  addGrade(id, grade) {
+  addStudent(student:T) {
+    this.students.push(student);
+    return `${student.name} added to the Gradebook`;
 
   }
 
-  getAverageGrade(id) {
+  addGrade(id:number, grade:Grade) {
+    const student = this.students.find((student) => student.id === id);
+    if (student){
+    student.grades.push(grade);
+    return `Grade recorded for ${grade.subject}`;
+    }else{ return `${student.name} not found` };
+
+  }
+  
+
+  getAverageGrade(id: number) {
+    const student = this.students.find((student) => student.id === id);
+    if(student){
+      const sum = student.grades.reduce((acc, grade) => acc + grade.grade, 0);
+      return sum / student.grades.length;
+    }
+    return `${student.name} not found`;
 
   }
 
-  getStudentGrades(id) {
+  getStudentGrades(id:number) {
+    const student = this.students.find((student) => student.id === id);
+    if(student){
+      return student.grades;
+    }else{
+      return `${student.name} not found`;
+    }
 
   }
 
-  updateSubjectGrade(id, subject, newGrade) {
-
+  updateSubjectGrade(id: number, subject:string, newGrade: number) {
+    const student = this.students.find((student) => student.id === id);
+    if(student){
+      const grade = student.grades.find((grade) => grade.subject === subject);
+      if(grade){
+        grade.grade = newGrade;
+        return `Grade recorded for ${grade.subject}`;
+      }else{
+        return `${student.name} does not have a grade for ${subject}`;
+      }
+    }else{
+      return `${student.name} not found`;
+    }
   }
 }
 

@@ -11,27 +11,43 @@
 class MyStorage<T, U> {
   items = []
 
-  addItem(item) {
+  addItem(item:T) {
+    this.items.push(item);
+    return `${item} added to storage.`;
 
   }
 
   getItems() {
+    return this.items;
 
   }
 
-  removeItem(id) {
+  removeItem(id:number) {
+    const index = this.items.findIndex((item) => item.id === id);
+    if (index !== -1) {
+      const removedItem = this.items.splice(index, 1)[0];
+      return `${removedItem} removed from storage.`;
+    }
+    return `Item with id ${id} not found in storage` 
 
   }
 
-  findItem(prop, val) {
+  findItem(prop:string, value: string) {
+    return this.items.find((item) => item[prop] === value);
 
   }
 
-  updateItem(prop, id, update) {
+  updateItem(prop:string, id:number, update:Partial<T>) {
+    const item = this.items.find((item) => item[prop] === id);
+    if (item) {
+      Object.assign(item, update);
+      return `${item} updated successfully.`;
+    } else {
+      return `Item not found`;
 
   }
 }
-
+}
 // Test cases
 const numberStrStorage = new MyStorage<number, string>();
 
