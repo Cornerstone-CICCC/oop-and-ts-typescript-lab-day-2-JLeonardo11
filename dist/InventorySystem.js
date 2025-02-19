@@ -24,8 +24,16 @@ class InventoryManager {
         }
     }
     getProduct(id) {
+        const product = this.products.find((product) => product.id === id);
+        if (product) {
+            return product;
+        }
+        else {
+            return `Product not found`;
+        }
     }
     getAllProducts() {
+        return this.products;
     }
     removeProduct(id) {
     }
